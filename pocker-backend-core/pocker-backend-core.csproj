@@ -6,4 +6,29 @@
         <RootNamespace>pocker_backend_core</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0-rc.2.20475.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="websocket-sharp">
+        <HintPath>..\vendors\Debug\websocket-sharp.dll</HintPath>
+      </Reference>
+      <Reference Include="websocket-sharp">
+        <HintPath>..\vendors\Release\websocket-sharp.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="obj\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="obj\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="obj\**" />
+    </ItemGroup>
+
 </Project>

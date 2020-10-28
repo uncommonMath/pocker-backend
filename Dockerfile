@@ -6,4 +6,4 @@ COPY . .
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-CMD dotnet out/pocker-backend-core.dll "http://*:$PORT/"
+CMD dotnet out/pocker-backend-core.dll "$PORT"

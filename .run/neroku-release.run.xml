@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="neroku-release" type="RunNativeExe" factoryName="Native Executable">
+    <option name="EXE_PATH" value="/snap/bin/heroku" />
+    <option name="PROGRAM_PARAMETERS" value="container:release -a pocker-backend web" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="neroku-push" run_configuration_type="RunNativeExe" />
+    </method>
+  </configuration>
+</component>

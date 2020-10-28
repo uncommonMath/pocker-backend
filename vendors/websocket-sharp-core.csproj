@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <Deterministic>false</Deterministic>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyName>websocket-sharp</AssemblyName>
+        <NoWarn>618</NoWarn>
+    </PropertyGroup>
+
+</Project>
+
