@@ -1,5 +1,5 @@
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 namespace pocker_backend_core
 {
@@ -7,32 +7,24 @@ namespace pocker_backend_core
     {
         private static readonly Directory Instance = new Directory();
 
-        public static void StartDirectory()
-        {
-            ThreadPool.QueueUserWorkItem(
-                state => state.Start(),
-                Instance,
-                false);
-            Instance.Wait();
-        }
-
-        private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
+        private readonly BlockingCollection<object> _messages = new BlockingCollection<object>();
 
         private Directory()
         {
         }
 
-        [SuppressMessage("ReSharper", "FunctionNeverReturns")]
-        private void Start()
+        public static void StartDirectory()
         {
-            while (true)
+            lock (Instance)
             {
+                Instance.Start();
             }
         }
 
-        private void Wait()
+        [SuppressMessage("ReSharper", "FunctionNeverReturns")]
+        private void Start()
         {
-            _manualResetEvent.WaitOne();
+            while (!_messages.IsCompleted) _messages.Take();
         }
     }
 }

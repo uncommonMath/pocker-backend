@@ -2,3 +2,15 @@
 
 bin/
 obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.git/
+.idea/
+.run/
+static/favicon.png
+vendors/*.csproj
+.dockerignore
+.gitignore
+*.sln.*
+**/*.sh

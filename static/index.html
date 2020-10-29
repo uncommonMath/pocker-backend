@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" href="./favicon.ico?v=${System.DateTime.Now.Ticks}">
+    <meta content="text/html">
     <meta charset="UTF-8">
     <style>
+        @font-face {
+            font-family: 'impact';
+            src: url('./impact.woff?v=${System.DateTime.Now.Ticks}') format('woff');
+        }
         html, body {
+            background-color: goldenrod;
             display: flex;
             flex-direction: column;
             height: 100%;
         }
-        div {
-            align-items: center;
+        div.greeting {
+            margin: auto;
+        }
+        div.greeting p {
             color: indigo;
+            font-family: 'impact', serif;
             font-size: 36pt;
             font-style: oblique;
             font-weight: bold;
-            justify-content: center;
-            margin: auto;
         }
     </style>
     <title>pocker-backend</title>
 </head>
 <body>
-    <div>
+    <div class="greeting">
         <p>Welcome to pocker-backend server</p>
     </div>
 </body>

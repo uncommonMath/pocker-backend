@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using System.Text;
+using System.Text.RegularExpressions;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using WebSocketSharp.Server;
@@ -24,8 +24,9 @@ namespace pocker_backend_core
         {
             _httpServer = new HttpServer(port)
             {
-                DocumentRootPath = ConfigurationManager.AppSettings["DocumentRootPath"]
+                DocumentRootPath = ConfigurationManager.AppSettings["webRoot"]
             };
+            _httpServer.AddWebSocketService<FrontEndService>("/FrontEnd");
             _httpServer.OnGet += (sender, e) =>
             {
                 var req = e.Request;
@@ -34,21 +35,23 @@ namespace pocker_backend_core
                 var path = req.RawUrl;
                 if (path == "/")
                     path += "index.html";
+                path = Regex.Replace(path, "\\?.+", string.Empty);
 
-                if (!e.TryReadFile(path, out var contents) || !path.EndsWith(".html"))
+                if (!e.TryReadFile(path, out var contents) || !WebHelper.AllowedExtension(path))
                 {
-                    Console.WriteLine($"404 - {path}");
-                    res.StatusCode = (int) HttpStatusCode.NotFound;
+                    WebHelper.StatusCode(HttpStatusCode.NotFound, e);
                     return;
                 }
 
-                res.ContentEncoding = Encoding.UTF8;
+                if (path.EndsWith(".html")) WebHelper.PreProcessHtml(ref contents);
+                
+                WebHelper.StatusCode(HttpStatusCode.OK, e);
                 res.ContentLength64 = contents.LongLength;
-                res.ContentType = "text/html";
                 res.Close(contents, true);
             };
-            _httpServer.AddWebSocketService<FrontEndService>("/FrontEnd");
+            
             _httpServer.Start();
+            
             if (_httpServer.IsListening)
             {
                 Console.WriteLine("Listening on port {0}, and providing WebSocket services:", _httpServer.Port);
