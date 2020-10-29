@@ -51,8 +51,8 @@ namespace pocker_backend_core
             };
             
             _httpServer.Start();
-            
-            if (_httpServer.IsListening)
+
+            if (!_httpServer.IsListening) return;
             {
                 Console.WriteLine("Listening on port {0}, and providing WebSocket services:", _httpServer.Port);
                 foreach (var path in _httpServer.WebSocketServices.Paths)

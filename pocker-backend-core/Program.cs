@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net;
@@ -8,7 +9,7 @@ namespace pocker_backend_core
 {
     internal static class Program
     {
-        private static async void SimpleListenerExample(string[] prefixes)
+        private static async void SimpleListenerExample(IReadOnlyCollection<string> prefixes)
         {
             if (!HttpListener.IsSupported)
             {
@@ -16,7 +17,7 @@ namespace pocker_backend_core
                 return;
             }
 
-            if (prefixes == null || prefixes.Length == 0)
+            if (prefixes == null || prefixes.Count == 0)
                 throw new ArgumentException("prefixes");
 
             var listener = new HttpListener();
