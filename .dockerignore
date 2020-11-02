@@ -10,7 +10,13 @@ riderModule.iml
 .run/
 static/favicon.png
 vendors/*.csproj
+vendors/**/*.csproj
 .dockerignore
 .gitignore
 *.sln.*
+*.sh
 **/*.sh
+*.key
+**/*.key
+*.crt
+**/*.crt

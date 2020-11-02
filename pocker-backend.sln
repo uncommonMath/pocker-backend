@@ -1,6 +1,8 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pocker-backend-core", "pocker-backend-core\pocker-backend-core.csproj", "{211F23F8-3C7A-4EF8-BE49-438891134F0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pocker-backend-client", "pocker-backend-client\pocker-backend-client.csproj", "{0246DABD-25FC-4D25-940C-F5081A7854D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -11,5 +13,9 @@ Global
 		{211F23F8-3C7A-4EF8-BE49-438891134F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{211F23F8-3C7A-4EF8-BE49-438891134F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{211F23F8-3C7A-4EF8-BE49-438891134F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0246DABD-25FC-4D25-940C-F5081A7854D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0246DABD-25FC-4D25-940C-F5081A7854D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0246DABD-25FC-4D25-940C-F5081A7854D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0246DABD-25FC-4D25-940C-F5081A7854D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

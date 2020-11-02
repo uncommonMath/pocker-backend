@@ -13,10 +13,10 @@
 
     <ItemGroup>
       <Reference Include="websocket-sharp">
-        <HintPath>..\vendors\Debug\websocket-sharp.dll</HintPath>
+        <HintPath>..\vendors\websocket-sharp\Debug\websocket-sharp.dll</HintPath>
       </Reference>
       <Reference Include="websocket-sharp">
-        <HintPath>..\vendors\Release\websocket-sharp.dll</HintPath>
+        <HintPath>..\vendors\websocket-sharp\Release\websocket-sharp.dll</HintPath>
       </Reference>
     </ItemGroup>
 
