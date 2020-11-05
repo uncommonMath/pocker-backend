@@ -10,7 +10,7 @@ using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 using HttpListener = System.Net.HttpListener;
 
-namespace pocker_backend_core
+namespace pocker_backend_core.helpers
 {
     public static class WebHelper
     {

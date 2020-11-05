@@ -26,5 +26,9 @@
     <ItemGroup>
       <None Remove="obj\**" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\pocker-backend-core\pocker-backend-core.csproj" />
+    </ItemGroup>
     
 </Project>

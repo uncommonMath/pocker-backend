@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="pocker-backend-client" type="DotNetProject" factoryName=".NET Project">
+  <configuration default="false" name="pocker-backend-client" type="DotNetProject" factoryName=".NET Project" singleton="false">
     <option name="EXE_PATH" value="$PROJECT_DIR$/pocker-backend-client/bin/Debug/netcoreapp3.1/pocker-backend-client.dll" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pocker-backend-client" />
