@@ -1,8 +1,7 @@
-using pocker_backend_core.helpers;
-using pocker_backend_core.messages;
-using pocker_backend_core.messages.impl;
-using pocker_backend_core.messages.interaction;
-using pocker_backend_core.messages.interaction.request;
+using pocker_backend_core.helper;
+using pocker_backend_core.messaging;
+using pocker_backend_core.messaging.impl;
+using pocker_backend_core.messaging.interaction.request;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using pocker_backend_core.frontEnd;
-using pocker_backend_core.messages;
+using pocker_backend_core.messaging;
 
 namespace pocker_backend_core.lobby
 {
@@ -19,33 +20,57 @@ namespace pocker_backend_core.lobby
         {
         }
 
-        [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
-        public Lobby this[string lobbyName] => _lobbies.FirstOrDefault(x => x.LobbyName == lobbyName);
+        public Lobby this[string lobbyName]
+        {
+            get
+            {
+                lock (_lobbies)
+                {
+                    return _lobbies.FirstOrDefault(x => x.LobbyName == lobbyName);
+                }
+            }
+        }
+
+        public static bool CheckLobbyName(string userName)
+        {
+            return Regex.IsMatch(userName, "^[A-Za-z]{4,16}$");
+        }
+
+        public void UpdateUser(User user)
+        {
+            Console.WriteLine($"User lost: {user}"); //to!do exceptions work
+            UserLeave(user);
+        }
+
+        public bool CheckUsername(string userName)
+        {
+            lock (_lobbies)
+            {
+                return Regex.IsMatch(userName, "^[A-Za-z]{4,16}$") && !_lobbies.SelectMany(x => x.Users)
+                    .Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
+            }
+        }
 
         public Lobby NewLobby(string lobbyName, int lobbySize)
         {
             lock (_lobbies)
             {
-                if (_lobbies.Any(x => x.LobbyName == lobbyName)) return null;
+                if (this[lobbyName] != null) return null;
                 var lobby = new Lobby(lobbyName, lobbySize);
                 _lobbies.Add(lobby);
                 return lobby;
             }
         }
 
-        public void UpdateUser(User user)
-        {
-            Console.WriteLine($"User lost: {user}"); //todo exceptions work
-            UserLeave(user);
-        }
-
         public bool UserJoin(User requester, string userName, Lobby lobby)
         {
             lock (_lobbies)
             {
-                if (_lobbies.Any(x => x.ContainsUser(requester))) throw new ApplicationException("already in lobby");
+                if (GetLobbyByUser(requester) != null) throw new ApplicationException("already in lobby");
 
-                Debug.Assert(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
+                if (!CheckUsername(userName)) throw new ArgumentException("username");
+
+                Assert.IsFalse(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
                 return lobby.AddUser(requester, userName);
             }
         }
@@ -54,8 +79,16 @@ namespace pocker_backend_core.lobby
         {
             lock (_lobbies)
             {
-                var lobby = _lobbies.FirstOrDefault(x => x.ContainsUser(user));
+                var lobby = GetLobbyByUser(user);
                 lobby?.RemoveUser(user);
+            }
+        }
+
+        private Lobby GetLobbyByUser(User user)
+        {
+            lock (_lobbies)
+            {
+                return _lobbies.FirstOrDefault(x => x.ContainsUser(user));
             }
         }
     }

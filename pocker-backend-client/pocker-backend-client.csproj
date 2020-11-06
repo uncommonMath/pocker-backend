@@ -8,11 +8,15 @@
 
     <ItemGroup>
         <Reference Include="websocket-sharp">
-            <HintPath>..\vendors\websocket-sharp\Debug\websocket-sharp.dll</HintPath>
+            <HintPath>..\helper\websocket-sharp\Debug\websocket-sharp.dll</HintPath>
         </Reference>
         <Reference Include="websocket-sharp">
-            <HintPath>..\vendors\websocket-sharp\Release\websocket-sharp.dll</HintPath>
+            <HintPath>..\helper\websocket-sharp\Release\websocket-sharp.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\pocker-backend-core\pocker-backend-core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,10 +29,6 @@
 
     <ItemGroup>
       <None Remove="obj\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\pocker-backend-core\pocker-backend-core.csproj" />
     </ItemGroup>
     
 </Project>

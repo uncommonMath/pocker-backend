@@ -1,7 +1,7 @@
 ﻿using System;
 using pocker_backend_core.frontEnd;
-using pocker_backend_core.helpers;
-using pocker_backend_core.messages;
+using pocker_backend_core.helper;
+using pocker_backend_core.messaging;
 
 namespace pocker_backend_core
 {
@@ -13,12 +13,11 @@ namespace pocker_backend_core
 
             if (args.Length > 3 && string.Equals(args[3], "schemas", StringComparison.Ordinal))
             {
-                Support.GenerateSchemasForInteractions();
+                SchemaHelper.GenerateSchemasForInteractions();
                 return;
             }
 
             var port = ushort.Parse(args[0]);
-
             var url = $"http://*:{port}/";
 
             if (args.Length < 2 || !string.Equals(args[1], "simple", StringComparison.Ordinal))
@@ -28,7 +27,6 @@ namespace pocker_backend_core
                 WebHelper.SimpleListenerExample(new[] {url});
 
             Console.WriteLine($"Started application at {url}");
-
             Directory.StartDirectory();
         }
     }

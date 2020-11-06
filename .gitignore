@@ -4,7 +4,9 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
-vendors/cryptography/*
-!vendors/cryptography/ssl.sh
-vendors/websocket-sharp/*/
+helper/cryptography/*
+!helper/cryptography/ssl.sh
+helper/websocket-sharp/*/
+helper/schemas
 AdditionalHelper.cs
+*.log

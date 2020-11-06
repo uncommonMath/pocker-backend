@@ -5,10 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
-using pocker_backend_core.helpers;
-using pocker_backend_core.messages;
-using pocker_backend_core.messages.@event;
-using pocker_backend_core.messages.interaction;
+using pocker_backend_core.helper;
+using pocker_backend_core.messaging;
+using pocker_backend_core.messaging.@event;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using WebSocketSharp.Server;
@@ -25,6 +24,11 @@ namespace pocker_backend_core.frontEnd
 
         private FrontEndService()
         {
+            Console.CancelKeyPress += (s, e) =>
+            {
+                if (_httpServer?.IsListening ?? false) _httpServer.Stop();
+                Console.WriteLine("finished");
+            };
         }
 
         [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global")]

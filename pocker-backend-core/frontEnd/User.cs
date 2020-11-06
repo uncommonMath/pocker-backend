@@ -1,11 +1,13 @@
 using pocker_backend_core.lobby;
-using pocker_backend_core.messages;
-using pocker_backend_core.messages.interaction.response;
+using pocker_backend_core.messaging;
+using pocker_backend_core.messaging.interaction.response;
 
 namespace pocker_backend_core.frontEnd
 {
     public sealed class User
     {
+        public static readonly User Invalid = new User();
+
         private User()
         {
         }
@@ -17,7 +19,7 @@ namespace pocker_backend_core.frontEnd
 
         public void UpdateLobby(Lobby lobby)
         {
-            Directory.Send(new LobbyUpdateResponse(this, lobby));
+            Directory.Send(new UpdateLobbyResponse(this, lobby));
         }
     }
 }

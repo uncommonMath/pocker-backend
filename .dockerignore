@@ -9,8 +9,9 @@ riderModule.iml
 .idea/
 .run/
 static/favicon.png
-vendors/*.csproj
-vendors/**/*.csproj
+helper/*.csproj
+helper/**/*.csproj
+helper/schemas
 .dockerignore
 .gitignore
 *.sln.*
@@ -20,3 +21,6 @@ vendors/**/*.csproj
 **/*.key
 *.crt
 **/*.crt
+*.log
+**/*.log
+pocker-backend-client/*
