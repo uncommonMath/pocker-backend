@@ -31,9 +31,9 @@ namespace pocker_backend_core.lobby
             }
         }
 
-        public static bool CheckLobbyName(string userName)
+        public static bool CheckLobbyName(string lobbyName)
         {
-            return Regex.IsMatch(userName, "^[A-Za-z]{4,16}$");
+            return Regex.IsMatch(lobbyName, "^[A-Za-z0-9]{4,16}$");
         }
 
         public void UpdateUser(User user)
@@ -46,7 +46,7 @@ namespace pocker_backend_core.lobby
         {
             lock (_lobbies)
             {
-                return Regex.IsMatch(userName, "^[A-Za-z]{4,16}$") && !_lobbies.SelectMany(x => x.Users)
+                return Regex.IsMatch(userName, "^[A-Za-z0-9]{4,16}$") && !_lobbies.SelectMany(x => x.Users)
                     .Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
             }
         }
@@ -70,7 +70,7 @@ namespace pocker_backend_core.lobby
 
                 if (!CheckUsername(userName)) throw new ArgumentException("username");
 
-                Assert.IsFalse(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
+                Assert.IsTrue(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
                 return lobby.AddUser(requester, userName);
             }
         }

@@ -22,7 +22,16 @@ namespace pocker_backend_core.messaging.interaction.request
         {
             if (LobbySize < 2 || LobbySize > 4) throw new ArgumentException("LobbySize");
 
-            if (!LobbyService.CheckLobbyName(LobbyName)) Directory.Send(new BadLobbyNameResponse(Requester));
+            if (!LobbyService.CheckLobbyName(LobbyName))
+            {
+                Directory.Send(new BadLobbyNameResponse(Requester));
+                return;
+            }
+            if (!actor.CheckUsername(Username))
+            {
+                Directory.Send(new BadUsernameResponse(Requester));
+                return;
+            }
 
             var lobby = actor.NewLobby(LobbyName, LobbySize);
             if (lobby == null)

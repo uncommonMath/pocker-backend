@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using System.Threading;
 using pocker_backend_core.helper;
 using pocker_backend_core.messaging;
 using pocker_backend_core.messaging.@event;
@@ -21,12 +23,15 @@ namespace pocker_backend_core.frontEnd
         private readonly Dictionary<User, Connection> _connections = new Dictionary<User, Connection>();
 
         private HttpServer _httpServer;
+        
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
         private FrontEndService()
         {
             Console.CancelKeyPress += (s, e) =>
             {
                 if (_httpServer?.IsListening ?? false) _httpServer.Stop();
+                _cts.Cancel();
                 Console.WriteLine("finished");
             };
         }
@@ -121,7 +126,9 @@ namespace pocker_backend_core.frontEnd
                     res.Close(contents, true);
                 };
                 _httpServer.AddWebSocketService<Connection>("/FrontEnd");
-
+                TasksHelper.RecurringTask(() => _httpServer.WebSocketServices.Hosts.Select(y => y.Sessions).ToList()
+                    .ForEach(y => y.IDs.ToList().ForEach(z => y.PingTo(z))), 5, _cts.Token);
+                
                 _httpServer.Start();
 
                 if (!_httpServer.IsListening) throw new ApplicationException("startup");
