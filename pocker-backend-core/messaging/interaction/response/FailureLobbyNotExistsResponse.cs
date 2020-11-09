@@ -4,9 +4,9 @@ using pocker_backend_core.frontEnd;
 namespace pocker_backend_core.messaging.interaction.response
 {
     [Description("Комнаты с таким названием не существует.")]
-    public class LobbyNotExistsResponse : AbstractResponse
+    public class FailureLobbyNotExistsResponse : AbstractResponse
     {
-        public LobbyNotExistsResponse(User receiver) : base(receiver)
+        public FailureLobbyNotExistsResponse(User receiver) : base(receiver)
         {
         }
     }

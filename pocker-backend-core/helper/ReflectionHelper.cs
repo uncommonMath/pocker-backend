@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace pocker_backend_core.helper
 {
@@ -23,6 +24,33 @@ namespace pocker_backend_core.helper
             }
 
             return false;
+        }
+
+        public static void SetProperty(object obj, string propertyName, object val)
+        {
+            var type = obj.GetType();
+            do
+            {
+                var property = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
+                if (property!.CanWrite)
+                {
+                    property.SetValue(obj, val);
+                    break;
+                }
+
+                type = type.BaseType;
+            } while (type != null);
+        }
+
+        public static bool IsAssignableToGeneric(Type givenType, Type genericType)
+        {
+            if (givenType.GetInterfaces()
+                .Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType)) return true;
+            if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+                return true;
+            if (givenType == genericType)
+                return true;
+            return givenType.BaseType != null && IsAssignableToGeneric(givenType.BaseType, genericType);
         }
     }
 }

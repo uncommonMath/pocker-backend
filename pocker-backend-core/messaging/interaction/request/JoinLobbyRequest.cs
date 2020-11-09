@@ -7,9 +7,9 @@ namespace pocker_backend_core.messaging.interaction.request
 {
     [Description("Подключение к уже существующей комнате.")]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    public class JoinToLobbyExistence : JoinToLobbyBase
+    public class JoinLobbyRequest : LobbyRequestBase
     {
-        public JoinToLobbyExistence(string lobbyName, string username) : base(username, lobbyName)
+        public JoinLobbyRequest(string lobbyName, string username) : base(username, lobbyName)
         {
         }
 
@@ -18,11 +18,11 @@ namespace pocker_backend_core.messaging.interaction.request
             var lobby = actor[LobbyName];
             if (lobby == null)
             {
-                Directory.Send(new LobbyNotExistsResponse(Requester));
+                SendResponse<FailureLobbyNotExistsResponse>();
                 return;
             }
 
-            if (TryEnterLobby(actor, lobby)) Directory.Send(new SuccessLobbyJoiningResponse(Requester));
+            if (TryEnterLobby(actor, lobby)) SendResponse<SuccessLobbyJoiningResponse>();
         }
     }
 }

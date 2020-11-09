@@ -7,10 +7,11 @@ namespace pocker_backend_core.helper
 {
     public static class TasksHelper
     {
-        public static void RecurringTask(Action action, int seconds, CancellationToken token) 
+        public static void RecurringTask(Action action, int seconds, CancellationToken token)
         {
             Assert.NotNull(action);
-            Task.Run(async () => {
+            Task.Run(async () =>
+            {
                 while (!token.IsCancellationRequested)
                 {
                     action();

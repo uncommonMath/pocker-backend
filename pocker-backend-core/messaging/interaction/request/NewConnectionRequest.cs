@@ -18,8 +18,7 @@ namespace pocker_backend_core.messaging.interaction.request
         {
             Assert.IsTrue(_connection != null,
                 "_connection == null, probably trying use NewConnectionRequest on FrontEnd, which is unacceptable");
-            var user = actor.Accept(_connection);
-            Directory.Send(new SuccessConnectionResponse(user));
+            Send<SuccessConnectionResponse>(actor.Accept(_connection));
         }
     }
 }

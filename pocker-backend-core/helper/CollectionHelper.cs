@@ -15,7 +15,8 @@ namespace pocker_backend_core.helper
 
         public static TK GetByValue<TK, TV>(IDictionary<TK, TV> dictionary, TV value)
         {
-            return dictionary.First(kv => value.Equals(kv.Value)).Key;
+            //to!do dict.First()?.Key  ?!
+            return dictionary.Where(kv => value.Equals(kv.Value)).Select(kv => kv.Key).FirstOrDefault();
         }
     }
 }

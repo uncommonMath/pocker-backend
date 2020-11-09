@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using pocker_backend_core.helper;
 using pocker_backend_core.messaging.interaction.request;
 using WebSocketSharp;
@@ -24,9 +23,9 @@ namespace pocker_backend_client
             };
             while (true)
             {
-                var newLobbyReq = JsonHelper.Serialize(new JoinToLobbyNew("Dungeon", "Go 1x1 noob", 4));
+                var newLobbyReq = JsonHelper.Serialize(new CreateLobbyRequest("Dungeon", Console.ReadLine(), 4));
                 ws.Send(newLobbyReq);
-                Thread.Sleep(5000);
+                Console.ReadKey(true);
             }
         }
     }

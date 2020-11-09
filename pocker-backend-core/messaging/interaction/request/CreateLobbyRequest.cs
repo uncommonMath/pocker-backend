@@ -8,12 +8,12 @@ using pocker_backend_core.messaging.interaction.response;
 namespace pocker_backend_core.messaging.interaction.request
 {
     [Description("Создание новой комнаты.")]
-    public class JoinToLobbyNew : JoinToLobbyBase
+    public class CreateLobbyRequest : LobbyRequestBase
     {
         [DefaultValue(2)] [Description("Размер комнаты.")] [JsonProperty(Order = 3)] [Range(2, 4)] [Required]
         protected int LobbySize;
 
-        public JoinToLobbyNew(string lobbyName, string username, int lobbySize) : base(username, lobbyName)
+        public CreateLobbyRequest(string lobbyName, string username, int lobbySize) : base(username, lobbyName)
         {
             LobbySize = lobbySize;
         }
@@ -22,25 +22,20 @@ namespace pocker_backend_core.messaging.interaction.request
         {
             if (LobbySize < 2 || LobbySize > 4) throw new ArgumentException("LobbySize");
 
-            if (!LobbyService.CheckLobbyName(LobbyName))
+            if (!actor.CheckLobbyName(LobbyName))
             {
-                Directory.Send(new BadLobbyNameResponse(Requester));
+                SendResponse<FailureBadLobbyNameResponse>();
                 return;
             }
+
             if (!actor.CheckUsername(Username))
             {
-                Directory.Send(new BadUsernameResponse(Requester));
+                SendResponse<FailureBadUsernameResponse>();
                 return;
             }
 
-            var lobby = actor.NewLobby(LobbyName, LobbySize);
-            if (lobby == null)
-            {
-                Directory.Send(new LobbyAlreadyExistsResponse(Requester));
-                return;
-            }
-
-            if (TryEnterLobby(actor, lobby)) Directory.Send(new SuccessLobbyCreationResponse(Requester));
+            if (TryEnterLobby(actor, actor.NewLobby(LobbyName, LobbySize)))
+                SendResponse<SuccessLobbyCreationResponse>();
         }
     }
 }

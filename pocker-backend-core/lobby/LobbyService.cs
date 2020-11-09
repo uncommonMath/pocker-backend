@@ -31,23 +31,25 @@ namespace pocker_backend_core.lobby
             }
         }
 
-        public static bool CheckLobbyName(string lobbyName)
-        {
-            return Regex.IsMatch(lobbyName, "^[A-Za-z0-9]{4,16}$");
-        }
-
         public void UpdateUser(User user)
         {
             Console.WriteLine($"User lost: {user}"); //to!do exceptions work
             UserLeave(user);
         }
 
+        public bool CheckLobbyName(string lobbyName)
+        {
+            return Regex.IsMatch(lobbyName, "^[A-Za-z0-9]{4,16}$") &&
+                   this[lobbyName] == null;
+        }
+
         public bool CheckUsername(string userName)
         {
             lock (_lobbies)
             {
-                return Regex.IsMatch(userName, "^[A-Za-z0-9]{4,16}$") && !_lobbies.SelectMany(x => x.Users)
-                    .Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
+                return Regex.IsMatch(userName, "^[A-Za-z0-9]{4,16}$") &&
+                       !_lobbies.SelectMany(x => x.Users)
+                           .Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -55,8 +57,8 @@ namespace pocker_backend_core.lobby
         {
             lock (_lobbies)
             {
-                if (this[lobbyName] != null) return null;
-                var lobby = new Lobby(lobbyName, lobbySize);
+                Assert.IsTrue(CheckLobbyName(lobbyName), "CheckLobbyName(lobbyName)");
+                var lobby = Lobby.NewLobby(lobbyName, lobbySize);
                 _lobbies.Add(lobby);
                 return lobby;
             }
@@ -66,11 +68,12 @@ namespace pocker_backend_core.lobby
         {
             lock (_lobbies)
             {
-                if (GetLobbyByUser(requester) != null) throw new ApplicationException("already in lobby");
+                Assert.IsNull(GetLobbyByUser(requester), "GetLobbyByUser(requester) == null");
 
-                if (!CheckUsername(userName)) throw new ArgumentException("username");
+                Assert.IsTrue(CheckUsername(userName), "CheckUsername(userName)");
 
                 Assert.IsTrue(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
+
                 return lobby.AddUser(requester, userName);
             }
         }
@@ -81,6 +84,8 @@ namespace pocker_backend_core.lobby
             {
                 var lobby = GetLobbyByUser(user);
                 lobby?.RemoveUser(user);
+
+                if (lobby?.IsEmpty ?? false) _lobbies.Remove(lobby);
             }
         }
 

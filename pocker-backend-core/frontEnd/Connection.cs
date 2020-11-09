@@ -19,13 +19,13 @@ namespace pocker_backend_core.frontEnd
         {
             var msg = e.Data;
             var msgObj = JsonHelper.Deserialize<IRequest>(msg);
-            Directory.Send(new ReceivedRequestMessage(this, msgObj));
+            AbstractMessage<Actor>.Send<ReceivedRequestMessage>(this, msgObj);
         }
 
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
-            Directory.Send(new ConnectionLostMessage(this));
+            AbstractMessage<Actor>.Send<ConnectionLostMessage>(this);
         }
 
         public void SendResponse(AbstractResponse response)

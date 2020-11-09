@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -22,9 +21,9 @@ namespace pocker_backend_core.frontEnd
 
         private readonly Dictionary<User, Connection> _connections = new Dictionary<User, Connection>();
 
-        private HttpServer _httpServer;
-        
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+        private HttpServer _httpServer;
 
         private FrontEndService()
         {
@@ -68,10 +67,8 @@ namespace pocker_backend_core.frontEnd
         {
             lock (_connections)
             {
-                request.GetType().GetField("Requester",
-                    BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(request,
+                ReflectionHelper.SetProperty(request, "Requester",
                     CollectionHelper.GetByValue(_connections, connection));
-
                 Directory.Send(request);
             }
         }
@@ -80,8 +77,8 @@ namespace pocker_backend_core.frontEnd
         {
             lock (_connections)
             {
-                var connection = _connections[response.Receiver];
-                connection.SendResponse(response);
+                if (_connections.TryGetValue(response.Receiver, out var connection))
+                    connection.SendResponse(response);
             }
         }
 
@@ -128,7 +125,7 @@ namespace pocker_backend_core.frontEnd
                 _httpServer.AddWebSocketService<Connection>("/FrontEnd");
                 TasksHelper.RecurringTask(() => _httpServer.WebSocketServices.Hosts.Select(y => y.Sessions).ToList()
                     .ForEach(y => y.IDs.ToList().ForEach(z => y.PingTo(z))), 5, _cts.Token);
-                
+
                 _httpServer.Start();
 
                 if (!_httpServer.IsListening) throw new ApplicationException("startup");

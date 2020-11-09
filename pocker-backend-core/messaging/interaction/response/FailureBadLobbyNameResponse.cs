@@ -4,9 +4,9 @@ using pocker_backend_core.frontEnd;
 namespace pocker_backend_core.messaging.interaction.response
 {
     [Description("Недопустимое название комнаты(должно содержать 4-16 символов латиницы или цифры).")]
-    public class BadLobbyNameResponse : AbstractResponse
+    public class FailureBadLobbyNameResponse : AbstractResponse
     {
-        public BadLobbyNameResponse(User requester) : base(requester)
+        public FailureBadLobbyNameResponse(User requester) : base(requester)
         {
         }
     }

@@ -12,9 +12,9 @@ namespace pocker_backend_core.messaging
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
-        public static void Static<T>() where T : AbstractEvent<TA, TE>
+        public static void Static<TM>() where TM : AbstractEvent<TA, TE>
         {
-            Directory.RegisterEvent<T, TA, TE>();
+            Directory.RegisterEvent<TM, TA, TE>();
         }
     }
 }

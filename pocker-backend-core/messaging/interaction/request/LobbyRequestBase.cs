@@ -6,7 +6,7 @@ using pocker_backend_core.messaging.interaction.response;
 
 namespace pocker_backend_core.messaging.interaction.request
 {
-    public abstract class JoinToLobbyBase : AbstractRequest<LobbyService>
+    public abstract class LobbyRequestBase : AbstractRequest<LobbyService>
     {
         [DefaultValue("POE Hideout")]
         [Description("Имя комнаты.")]
@@ -20,7 +20,7 @@ namespace pocker_backend_core.messaging.interaction.request
         [Required]
         protected string Username;
 
-        protected JoinToLobbyBase(string username, string lobbyName)
+        protected LobbyRequestBase(string username, string lobbyName)
         {
             Username = username;
             LobbyName = lobbyName;
@@ -30,12 +30,12 @@ namespace pocker_backend_core.messaging.interaction.request
         {
             if (!actor.CheckUsername(Username))
             {
-                Directory.Send(new BadUsernameResponse(Requester));
+                SendResponse<FailureBadUsernameResponse>();
                 return false;
             }
 
             if (actor.UserJoin(Requester, Username, lobby)) return true;
-            Directory.Send(new LobbyIsFullResponse(Requester));
+            SendResponse<FailureLobbyIsFullResponse>();
             return false;
         }
     }
