@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using pocker_backend_core.lobby;
+using pocker_backend_core.messaging.interaction.request.@base;
 using pocker_backend_core.messaging.interaction.response;
 
 namespace pocker_backend_core.messaging.interaction.request

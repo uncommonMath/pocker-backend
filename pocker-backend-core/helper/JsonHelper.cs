@@ -9,7 +9,7 @@ namespace pocker_backend_core.helper
     {
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.All,
+            TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
 
@@ -17,7 +17,7 @@ namespace pocker_backend_core.helper
 
         public static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, Settings);
+            return JsonConvert.SerializeObject(obj, typeof(object), Settings);
         }
 
         public static T Deserialize<T>(string json)

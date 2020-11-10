@@ -31,7 +31,7 @@ namespace pocker_backend_core.lobby
             }
         }
 
-        public void UpdateUser(User user)
+        public void OnUserLost(User user)
         {
             Console.WriteLine($"User lost: {user}"); //to!do exceptions work
             UserLeave(user);
@@ -48,8 +48,7 @@ namespace pocker_backend_core.lobby
             lock (_lobbies)
             {
                 return Regex.IsMatch(userName, "^[A-Za-z0-9]{4,16}$") &&
-                       !_lobbies.SelectMany(x => x.Users)
-                           .Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
+                       GetLobbyByUser(userName) == null;
             }
         }
 
@@ -58,13 +57,14 @@ namespace pocker_backend_core.lobby
             lock (_lobbies)
             {
                 Assert.IsTrue(CheckLobbyName(lobbyName), "CheckLobbyName(lobbyName)");
+
                 var lobby = Lobby.NewLobby(lobbyName, lobbySize);
                 _lobbies.Add(lobby);
                 return lobby;
             }
         }
 
-        public bool UserJoin(User requester, string userName, Lobby lobby)
+        public void UserJoin(User requester, string userName, Lobby lobby)
         {
             lock (_lobbies)
             {
@@ -74,7 +74,7 @@ namespace pocker_backend_core.lobby
 
                 Assert.IsTrue(_lobbies.Contains(lobby), "_lobbies.Contains(lobby)");
 
-                return lobby.AddUser(requester, userName);
+                lobby.AddUser(requester, userName);
             }
         }
 
@@ -94,6 +94,14 @@ namespace pocker_backend_core.lobby
             lock (_lobbies)
             {
                 return _lobbies.FirstOrDefault(x => x.ContainsUser(user));
+            }
+        }
+
+        private Lobby GetLobbyByUser(string userName)
+        {
+            lock (_lobbies)
+            {
+                return _lobbies.FirstOrDefault(x => x.ContainsUser(userName));
             }
         }
     }

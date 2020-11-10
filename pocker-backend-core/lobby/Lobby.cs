@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +27,8 @@ namespace pocker_backend_core.lobby
             LobbySize = lobbySize;
         }
 
+        public override ICollection Subscribers => UsersMap.Keys;
+
         [DefaultValue("POE Hideout")]
         [System.ComponentModel.Description("Имя комнаты.")]
         [JsonProperty(Order = 1, DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -47,15 +50,46 @@ namespace pocker_backend_core.lobby
         [Required]
         public string[] Users => UsersMap.Values.ToArray();
 
-        [JsonIgnore] public bool IsEmpty => !Users.Any();
-        public override ICollection Subscribers => UsersMap.Keys;
+        [DefaultValue(typeof(StringArrayConverter), "-1")]
+        [System.ComponentModel.Description("Идентификаторы участников.")]
+        [JsonProperty(Order = 4, DefaultValueHandling = DefaultValueHandling.Populate)]
+        [MinLength(1)]
+        [MaxLength(4)]
+        [Required]
+        public long[] Ids => UsersMap.Keys.Select(x => x.UserId).ToArray();
+
+        [DefaultValue(true)]
+        [System.ComponentModel.Description("Комната пуста.")]
+        [JsonProperty(Order = 5, DefaultValueHandling = DefaultValueHandling.Populate)]
+        [Required]
+        public bool IsEmpty => !Users.Any();
+
+        [DefaultValue(false)]
+        [System.ComponentModel.Description("Комната заполнена.")]
+        [JsonProperty(Order = 6, DefaultValueHandling = DefaultValueHandling.Populate)]
+        [Required]
+        public bool IsFull => Users.Length == LobbySize;
 
         public static Lobby NewLobby(string lobbyName, int lobbySize)
         {
             Assert.IsTrue(lobbySize > 1 && lobbySize < 5, "lobbySize > 1 && lobbySize < 5");
+
             var lobby = new Lobby(lobbyName, lobbySize);
             lobby.UsersMap.Clear();
             return lobby;
+        }
+
+        [StateChanger(ResponseType = typeof(UpdateLobbyStateResponse))]
+        public void AddUser(User requester, string name)
+        {
+            Assert.IsFalse(IsFull, "IsFull");
+            UsersMap.Add(requester, name);
+        }
+
+        [StateChanger(ResponseType = typeof(UpdateLobbyStateResponse))]
+        public void RemoveUser(User requester)
+        {
+            Assert.IsTrue(UsersMap.Remove(requester), "UsersMap.Remove(requester)");
         }
 
         public bool ContainsUser(User user)
@@ -63,18 +97,9 @@ namespace pocker_backend_core.lobby
             return UsersMap.ContainsKey(user);
         }
 
-        [StateChanger(ResponseType = typeof(UpdateLobbyStateResponse))]
-        public bool AddUser(User requester, string name)
+        public bool ContainsUser(string userName)
         {
-            if (UsersMap.Count >= LobbySize) return false;
-            UsersMap.Add(requester, name);
-            return true;
-        }
-
-        [StateChanger(ResponseType = typeof(UpdateLobbyStateResponse))]
-        public void RemoveUser(User requester)
-        {
-            Assert.IsTrue(UsersMap.Remove(requester), "UsersMap.Remove(requester)");
+            return UsersMap.Values.Any(x => x.Equals(userName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

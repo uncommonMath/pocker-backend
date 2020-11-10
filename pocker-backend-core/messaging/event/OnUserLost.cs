@@ -14,7 +14,7 @@ namespace pocker_backend_core.messaging.@event
 
         public override void Run(LobbyService actor)
         {
-            actor.UpdateUser(EventArgs.LostUser);
+            actor.OnUserLost(EventArgs.LostUser);
         }
     }
 

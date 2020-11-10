@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using pocker_backend_core.lobby;
 using pocker_backend_core.messaging.interaction.response;
 
-namespace pocker_backend_core.messaging.interaction.request
+namespace pocker_backend_core.messaging.interaction.request.@base
 {
     public abstract class LobbyRequestBase : AbstractRequest<LobbyService>
     {
@@ -34,9 +34,14 @@ namespace pocker_backend_core.messaging.interaction.request
                 return false;
             }
 
-            if (actor.UserJoin(Requester, Username, lobby)) return true;
-            SendResponse<FailureLobbyIsFullResponse>();
-            return false;
+            if (lobby.IsFull)
+            {
+                SendResponse<FailureLobbyIsFullResponse>();
+                return false;
+            }
+
+            actor.UserJoin(Requester, Username, lobby);
+            return true;
         }
     }
 }

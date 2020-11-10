@@ -23,7 +23,7 @@ namespace pocker_backend_client
             };
             while (true)
             {
-                var newLobbyReq = JsonHelper.Serialize(new CreateLobbyRequest("Dungeon", Console.ReadLine(), 4));
+                var newLobbyReq = JsonHelper.Serialize(new CreateLobbyRequest("Dungeon", Console.ReadLine(), 2));
                 ws.Send(newLobbyReq);
                 Console.ReadKey(true);
             }

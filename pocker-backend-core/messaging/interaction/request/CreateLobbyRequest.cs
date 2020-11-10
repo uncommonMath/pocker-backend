@@ -1,8 +1,8 @@
-using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using pocker_backend_core.lobby;
+using pocker_backend_core.messaging.interaction.request.@base;
 using pocker_backend_core.messaging.interaction.response;
 
 namespace pocker_backend_core.messaging.interaction.request
@@ -20,7 +20,11 @@ namespace pocker_backend_core.messaging.interaction.request
 
         public override void Run(LobbyService actor)
         {
-            if (LobbySize < 2 || LobbySize > 4) throw new ArgumentException("LobbySize");
+            if (LobbySize < 2 || LobbySize > 4)
+            {
+                SendResponse<FailureBadLobbySizeResponse>();
+                return;
+            }
 
             if (!actor.CheckLobbyName(LobbyName))
             {
